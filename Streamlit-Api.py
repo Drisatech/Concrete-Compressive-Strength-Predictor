@@ -44,11 +44,16 @@ fineagg = st.number_input("Fine Aggregate (kg/m³)", min_value=0.0, value=800.0)
 age = st.number_input("Age (days)", min_value=1, value=28)
 
 # Predict Button
-if st.button("Predict Strength"):
-    input_data = pd.DataFrame([{
-    input_data = pd.DataFrame([[cement, slag, flyash, water, superplasticizer, coarseagg, fineagg, age]],
-                          columns=["cement", "slag", "fly_ash", "water",
-                                   "superplasticizer", "coarse_agg", "fine_agg", "age"])
+input_data = pd.DataFrame([{
+    "cement": cement,
+    "slag": slag,
+    "fly_ash": flyash,
+    "water": water,
+    "superplasticizer": superplasticizer,
+    "coarse_agg": coarseagg,
+    "fine_agg": fineagg,
+    "age": age
+}])
 
     prediction = model.predict(input_data)[0]
     strength_category = classify_strength_category(prediction)
