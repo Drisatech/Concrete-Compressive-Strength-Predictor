@@ -3,6 +3,11 @@ import streamlit as st
 import numpy as np
 import joblib
 
+import joblib
+
+#Load trained model
+model = joblib.load('concrete_xgb_model.pkl')
+
 def classify_strength_category(strength_value):
     if strength_value < 30:
         return 'Low Strength'
@@ -13,22 +18,28 @@ def classify_strength_category(strength_value):
     else:
         return 'Ultra-high Strength'
 
-# Load trained model
-model = joblib.load('concrete_xgb_model.pkl')  # path should be correct
-
 # App Title
-st.title("Concrete Compressive Strength Prediction")
+st.title("Concrete Compressive Strength Prediction With AI")
 st.subheader("Enter the mixture composition and age to predict strength (MPa)")
 
-# Input Fields
-cement = st.number_input("Cement (kg/m³)", min_value=0.0)
-slag = st.number_input("Blast Furnace Slag (kg/m³)", min_value=0.0)
-fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0)
-water = st.number_input("Water (kg/m³)", min_value=0.0)
-superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0)
-coarse_agg = st.number_input("Coarse Aggregate (kg/m³)", min_value=0.0)
-fine_agg = st.number_input("Fine Aggregate (kg/m³)", min_value=0.0)
-age = st.number_input("Age (days)", min_value=1, max_value=365)
+# Construct input data
+input_data = pd.DataFrame([{
+    "Cement": cement,
+    "Blast Furnace Slag": slag,
+    "Fly Ash": flyash,
+    "Water": water,
+    "Superplasticizer": superplasticizer,
+    "Coarse Aggregate": coarseagg,
+    "Fine Aggregate": fineagg,
+    "Age": age
+}])
+
+# Optional debug
+st.write("Input Data:")
+st.write(input_data)
+
+# Predict
+prediction = model.predict(input_data)[0]
 
 # Predict Button
 if st.button("Predict Strength"):
