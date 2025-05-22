@@ -46,15 +46,9 @@ age = st.number_input("Age (days)", min_value=1, value=28)
 # Predict Button
 if st.button("Predict Strength"):
     input_data = pd.DataFrame([{
-        "Cement": cement,
-        "Blast Furnace Slag": slag,
-        "Fly Ash": flyash,
-        "Water": water,
-        "Superplasticizer": superplasticizer,
-        "Coarse Aggregate": coarseagg,
-        "Fine Aggregate": fineagg,
-        "Age": age
-    }])
+    input_data = pd.DataFrame([[cement, slag, flyash, water, superplasticizer, coarseagg, fineagg, age]],
+                          columns=["cement", "slag", "fly_ash", "water",
+                                   "superplasticizer", "coarse_agg", "fine_agg", "age"])
 
     prediction = model.predict(input_data)[0]
     strength_category = classify_strength_category(prediction)
