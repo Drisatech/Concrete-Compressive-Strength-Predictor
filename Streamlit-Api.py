@@ -60,15 +60,28 @@ if st.button("Predict Strength"):
     st.success(f"Predicted Compressive Strength: {prediction:.2f} MPa")
     st.info(f"Strength Category: **{strength_category}**")
 
-    categories = ['Low Strength', 'Medium Strength', 'High Strength', 'Ultra-high Strength']
-    values = [0, 0, 0, 0]
+    # Define the strength categories and placeholder for pie chart
+categories = ['Low Strength', 'Medium Strength', 'High Strength', 'Ultra-high Strength']
+values = [0, 0, 0, 0]
+
+# Update the pie chart values based on prediction category
+if strength_category in categories:
     index = categories.index(strength_category)
     values[index] = 1
+else:
+    st.error(f"Unexpected strength category: {strength_category}")
 
-    fig, ax = plt.subplots()
-    ax.pie(values, labels=categories, autopct=lambda p: f'{p:.0f}%' if p > 0 else '', startangle=90, colors=['#FF9999','#FFCC99','#99FF99','#66B2FF'])
-    ax.axis('equal')
-    st.pyplot(fig)
+# Pie chart visualization
+fig, ax = plt.subplots()
+ax.pie(
+    values,
+    labels=categories,
+    autopct=lambda p: f'{p:.0f}%' if p > 0 else '',
+    startangle=90,
+    colors=['#FF9999','#FFCC99','#99FF99','#66B2FF']
+)
+ax.axis('equal')  # Equal aspect ratio ensures the pie is a circle.
+st.pyplot(fig)
 
 # After model prediction
 prediction = model.predict(input_data)[0]
