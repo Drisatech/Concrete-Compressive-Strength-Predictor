@@ -1,15 +1,13 @@
-# Streamlit-Api.py
-
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import joblib
+import matplotlib.pyplot as plt
 
-# Load the trained XGBoost model
+# Load trained model
 model = joblib.load('concrete_xgb_model.pkl')
 
-# Strength classification function
+# Strength category classifier
 def classify_strength_category(strength_value):
     if strength_value < 30:
         return 'Low Strength'
@@ -20,45 +18,57 @@ def classify_strength_category(strength_value):
     else:
         return 'Ultra-high Strength'
 
-# Emoji map for strength categories
-emoji_map = {
-    "Low Strength": "🔴",
-    "Medium Strength": "🟠",
-    "High Strength": "🟢",
-    "Ultra-high Strength": "🔵"
-}
+# App title
+st.title("Concrete Compressive Strength Prediction With AI")
+st.subheader("Enter the mixture composition and age to predict strength (MPa)")
 
-# Streamlit UI
-st.set_page_config(page_title="Concrete Strength Predictor", layout="centered")
-st.title("Concrete Compressive Strength Prediction with AI")
-st.subheader("Enter the concrete mixture composition and age (in days)")
+# Input fields
+cement = st.number_input("Cement (kg/m³)", min_value=0.0, key="cement")
+slag = st.number_input("Blast Furnace Slag (kg/m³)", min_value=0.0, key="slag")
+flyash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, key="flyash")
+water = st.number_input("Water (kg/m³)", min_value=0.0, key="water")
+superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, key="superplasticizer")
+coarseagg = st.number_input("Coarse Aggregate (kg/m³)", min_value=0.0, key="coarseagg")
+fineagg = st.number_input("Fine Aggregate (kg/m³)", min_value=0.0, key="fineagg")
+age = st.number_input("Age (days)", min_value=1, max_value=365, key="age")
 
-# User Inputs
-cement = st.number_input("Cement (kg/m³)", min_value=0.0, value=200.0)
-slag = st.number_input("Blast Furnace Slag (kg/m³)", min_value=0.0, value=50.0)
-flyash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, value=30.0)
-water = st.number_input("Water (kg/m³)", min_value=0.0, value=180.0)
-superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, value=5.0)
-coarseagg = st.number_input("Coarse Aggregate (kg/m³)", min_value=0.0, value=900.0)
-fineagg = st.number_input("Fine Aggregate (kg/m³)", min_value=0.0, value=800.0)
-age = st.number_input("Age (days)", min_value=1, value=28)
+# Buttons
+col1, col2 = st.columns(2)
 
-# Predict Button
-input_data = pd.DataFrame([{
-    "cement": cement,
-    "slag": slag,
-    "fly_ash": flyash,
-    "water": water,
-    "superplasticizer": superplasticizer,
-    "coarse_agg": coarseagg,
-    "fine_agg": fineagg,
-    "age": age
-}])
+with col1:
+    predict_clicked = st.button("Predict Strength")
+
+with col2:
+    reset_clicked = st.button("Reset Inputs")
+
+# Reset logic
+if reset_clicked:
+    st.experimental_rerun()
+
+# Prediction logic
+if predict_clicked:
+    input_data = pd.DataFrame([{
+        "cement": cement,
+        "slag": slag,
+        "fly_ash": flyash,
+        "water": water,
+        "superplasticizer": superplasticizer,
+        "coarse_agg": coarseagg,
+        "fine_agg": fineagg,
+        "age": age
+    }])
 
     prediction = model.predict(input_data)[0]
     strength_category = classify_strength_category(prediction)
 
     st.success(f"Predicted Compressive Strength: {prediction:.2f} MPa")
+
+    emoji_map = {
+        "Low Strength": "🔴",
+        "Medium Strength": "🟠",
+        "High Strength": "🟢",
+        "Ultra-high Strength": "🔵"
+    }
     st.write(f"**Strength Category:** {emoji_map[strength_category]} {strength_category}")
 
     # Pie chart visualization
@@ -68,8 +78,6 @@ input_data = pd.DataFrame([{
     if strength_category in categories:
         index = categories.index(strength_category)
         values[index] = 1
-    else:
-        st.error(f"Unexpected strength category: {strength_category}")
 
     fig, ax = plt.subplots()
     ax.pie(
@@ -80,5 +88,4 @@ input_data = pd.DataFrame([{
         colors=['#FF9999', '#FFCC99', '#99FF99', '#66B2FF']
     )
     ax.axis('equal')
-    st.subheader("Strength Category Visualization")
     st.pyplot(fig)
