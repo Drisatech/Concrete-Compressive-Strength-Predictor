@@ -62,9 +62,9 @@ if st.button("Predict Strength"):
 
     # Display colored category label
     st.markdown(
-        f"<h4 style='color:{color_map[strength_category]}'>{strength_category}</h4>",
-        unsafe_allow_html=True
-    )
+    f"<h4 style='color:{color_map[strength_category]}'>{strength_category}</h4>",
+    unsafe_allow_html=True  # Make sure your Streamlit version supports this
+)
 
     # Strength category pie chart
     categories = ['Low Strength', 'Medium Strength', 'High Strength', 'Ultra-high Strength']
