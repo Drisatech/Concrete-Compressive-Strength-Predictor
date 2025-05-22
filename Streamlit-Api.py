@@ -66,6 +66,10 @@ if st.button("Predict Strength"):
 prediction = model.predict(input_data)[0]
 strength_category = classify_strength_category(prediction)
 
+import streamlit as st
+
+strength_category = "Medium Strength"
+
 color_map = {
     "Low Strength": "red",
     "Medium Strength": "orange",
@@ -73,8 +77,6 @@ color_map = {
     "Ultra-high Strength": "blue"
 }
 
-# Show result
-st.success(f"Predicted Compressive Strength: {prediction:.2f} MPa")
 st.markdown(
     f"<h4 style='color:{color_map[strength_category]}'>{strength_category}</h4>",
     unsafe_allow_html=True
