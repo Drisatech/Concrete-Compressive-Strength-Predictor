@@ -82,15 +82,15 @@ if reset:
 # Handle Predict
 if predict:
     input_data = pd.DataFrame([{
-        "cement": st.session_state.cement,
-        "slag": st.session_state.slag,
-        "fly_ash": st.session_state.fly_ash,
-        "water": st.session_state.water,
-        "superplasticizer": st.session_state.superplasticizer,
-        "coarse_agg": st.session_state.coarse_agg,
-        "fine_agg": st.session_state.fine_agg,
-        "age": st.session_state.age
-    }])
+    "cement": st.session_state["cement"],
+    "slag": st.session_state["slag"],
+    "fly_ash": st.session_state["fly_ash"],
+    "water": st.session_state["water"],
+    "superplasticizer": st.session_state["superplasticizer"],
+    "coarse_agg": st.session_state["coarse_agg"],
+    "fine_agg": st.session_state["fine_agg"],
+    "age": st.session_state["age"]
+}])
 
     prediction = model.predict(input_data)[0]
     category = classify_strength_category(prediction)
