@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 # Display DRISA logo
-logo = Image.open("file-RTJLJBHscqGMficYYZ2rNJ")
+logo = Image.open("Drisa_Logo.jpg")
 st.image(logo, use_column_width=False, width=150)
+
+st.markdown("<div style='text-align: center;'><img src='drisa_logo.png' width='150'></div>", unsafe_allow_html=True)
 
 # Load trained model
 model = joblib.load('concrete_xgb_model.pkl')
