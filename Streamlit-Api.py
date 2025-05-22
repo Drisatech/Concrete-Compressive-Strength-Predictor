@@ -113,3 +113,6 @@ if uploaded_file is not None:
 
         csv = batch_df.to_csv(index=False).encode('utf-8')
         st.download_button("Download Results as CSV", csv, "predictions.csv", "text/csv")
+    
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")
