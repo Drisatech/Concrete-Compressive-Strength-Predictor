@@ -1,108 +1,93 @@
+# Streamlit-Api.py
+
 import streamlit as st
-import numpy as np
 import pandas as pd
+import numpy as np
 import joblib
 import matplotlib.pyplot as plt
 from PIL import Image
 
-# Load model
+# Page Config
+st.set_page_config(page_title="Concrete Strength Predictor", layout="centered")
+
+# Load Trained Model
 model = joblib.load("concrete_xgb_model.pkl")
 
-# Load and display logo centered
+# Load Logo
 logo = Image.open("Drisa_Logo.jpg")
-logo = logo.resize((100, 100))
-col1, col2, col3 = st.columns([1, 1, 1])
-with col2:
-    st.image(logo)
+st.image(logo, width=100)
 
-st.markdown("<h2 style='text-align: center;'>Concrete Strength Prediction</h2>", unsafe_allow_html=True)
-
-# App title
+# Title
 st.title("Concrete Compressive Strength Prediction With AI")
-st.subheader("Enter the mixture composition and age to predict strength (MPa)")
-
-# Strength categories
-def classify_strength_category(value):
-    if value < 30:
-        return "Low Strength"
-    elif 30 <= value < 60:
-        return "Medium Strength"
-    elif 60 <= value < 100:
-        return "High Strength"
-    else:
-        return "Ultra-high Strength"
-
-emoji_map = {
-    "Low Strength": "🔴",
-    "Medium Strength": "🟠",
-    "High Strength": "🟢",
-    "Ultra-high Strength": "🔵"
-}
-
-# Set default values using session_state
-default_inputs = {
-    'cement': 0.0,
-    'slag': 0.0,
-    'fly_ash': 0.0,
-    'water': 0.0,
-    'superplasticizer': 0.0,
-    'coarse_agg': 0.0,
-    'fine_agg': 0.0,
-    'age': 1
-}
-
-# Initialize inputs if not present
-for key, val in default_inputs.items():
-    if key not in st.session_state:
-        st.session_state[key] = val
+st.subheader("Enter mixture composition and age to predict strength (MPa)")
 
 # Form
 with st.form("input_form"):
-    st.session_state.cement = st.number_input("Cement (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.cement, key="cement")
-    st.session_state.slag = st.number_input("Blast Furnace Slag (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.slag, key="slag")
-    st.session_state.fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.fly_ash, key="fly_ash")
-    st.session_state.water = st.number_input("Water (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.water, key="water")
-    st.session_state.superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.superplasticizer, key="superplasticizer")
-    st.session_state.coarse_agg = st.number_input("Coarse Aggregate (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.coarse_agg, key="coarse_agg")
-    st.session_state.fine_agg = st.number_input("Fine Aggregate (kg/m³)", min_value=0.0, step=1.0, value=st.session_state.fine_agg, key="fine_agg")
-    st.session_state.age = st.number_input("Age (days)", min_value=1, max_value=365, step=1, value=st.session_state.age, key="age")
+    cement = st.number_input("Cement (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="cement")
+    slag = st.number_input("Blast Furnace Slag (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="slag")
+    fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="fly_ash")
+    water = st.number_input("Water (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="water")
+    superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="superplasticizer")
+    coarse_agg = st.number_input("Coarse Aggregate (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="coarse_agg")
+    fine_agg = st.number_input("Fine Aggregate (kg/m³)", min_value=0.0, step=1.0, value=0.0, key="fine_agg")
+    age = st.number_input("Age (days)", min_value=1, step=1, value=1, key="age")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        predict = st.form_submit_button("Predict Strength")
-    with col2:
-        reset = st.form_submit_button("Reset Input")
+    submit = st.form_submit_button("Predict Strength")
+    reset = st.form_submit_button("Reset Input")
 
-# Handle Reset
+# Reset Logic
 if reset:
-    for key in default_inputs:
-        st.session_state[key] = default_inputs[key]
+    st.session_state.clear()
     st.experimental_rerun()
 
-# Handle Predict
-if predict:
+# Prediction and Display
+if submit:
     input_data = pd.DataFrame([{
-    "cement": st.session_state["cement"],
-    "slag": st.session_state["slag"],
-    "fly_ash": st.session_state["fly_ash"],
-    "water": st.session_state["water"],
-    "superplasticizer": st.session_state["superplasticizer"],
-    "coarse_agg": st.session_state["coarse_agg"],
-    "fine_agg": st.session_state["fine_agg"],
-    "age": st.session_state["age"]
-}])
+        "cement": cement,
+        "slag": slag,
+        "fly_ash": fly_ash,
+        "water": water,
+        "superplasticizer": superplasticizer,
+        "coarse_agg": coarse_agg,
+        "fine_agg": fine_agg,
+        "age": age
+    }])
 
     prediction = model.predict(input_data)[0]
-    category = classify_strength_category(prediction)
 
-    st.success(f"Predicted Strength: {prediction:.2f} MPa")
-    st.write(f"**Strength Category:** {emoji_map[category]} {category}")
+    def classify_strength_category(value):
+        if value < 30:
+            return "Low Strength"
+        elif 30 <= value < 60:
+            return "Medium Strength"
+        elif 60 <= value < 100:
+            return "High Strength"
+        else:
+            return "Ultra-high Strength"
 
-    categories = list(emoji_map.keys())
-    values = [1 if category == c else 0 for c in categories]
+    strength_category = classify_strength_category(prediction)
+
+    emoji_map = {
+        "Low Strength": "🔴",
+        "Medium Strength": "🟠",
+        "High Strength": "🟢",
+        "Ultra-high Strength": "🔵"
+    }
+
+    st.success(f"Predicted Compressive Strength: **{prediction:.2f} MPa**")
+    st.write(f"**Strength Category:** {emoji_map[strength_category]} {strength_category}")
+
+    # Pie Chart Visualization
+    categories = ["Low Strength", "Medium Strength", "High Strength", "Ultra-high Strength"]
+    values = [1 if cat == strength_category else 0 for cat in categories]
 
     fig, ax = plt.subplots()
-    ax.pie(values, labels=categories, autopct=lambda p: f'{p:.0f}%' if p > 0 else '', startangle=90,
-           colors=['#FF9999', '#FFCC99', '#99FF99', '#66B2FF'])
-    ax.axis('equal')
+    ax.pie(
+        values,
+        labels=categories,
+        autopct=lambda p: f'{p:.0f}%' if p > 0 else '',
+        startangle=90,
+        colors=["#FF9999", "#FFCC99", "#99FF99", "#66B2FF"]
+    )
+    ax.axis("equal")
     st.pyplot(fig)
