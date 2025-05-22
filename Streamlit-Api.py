@@ -48,7 +48,6 @@ with st.form("input_form"):
     age = st.number_input("Age (days)", min_value=1, step=1)
     
     submit = st.form_submit_button("Predict")
-    reset = st.form_submit_button("Reset Input")
 
 if submit:
     input_data = pd.DataFrame([{
@@ -90,9 +89,6 @@ if submit:
         "Strength (MPa)": round(prediction, 2),
         "Category": strength_category
     })
-
-if reset:
-    st.experimental_rerun()
 
 # Upload for bulk prediction
 st.markdown("---")
