@@ -3,6 +3,11 @@ import pandas as pd
 import numpy as np
 import joblib
 import matplotlib.pyplot as plt
+from PIL import Image
+
+# Display DRISA logo
+logo = Image.open("file-RTJLJBHscqGMficYYZ2rNJ")
+st.image(logo, use_column_width=False, width=150)
 
 # Load trained model
 model = joblib.load('concrete_xgb_model.pkl')
