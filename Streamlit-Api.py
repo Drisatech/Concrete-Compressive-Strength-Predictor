@@ -7,9 +7,12 @@ from PIL import Image
 
 # Display DRISA logo
 logo = Image.open("Drisa_Logo.jpg")
-st.image(logo, use_container_width=True)
 
-st.markdown("<div style='text-align: center;'><img src='Drisa_Logo.jpg' width='150'></div>", unsafe_allow_html=True)
+# Resize the logo (e.g., 100x100 pixels)
+logo = logo.resize((100, 100))
+
+# Display logo in the sidebar
+st.sidebar.image(logo, caption="DRISA", use_container_width=False)
 
 # Load trained model
 model = joblib.load('concrete_xgb_model.pkl')
