@@ -1,5 +1,5 @@
 # Streamlit-Api.py
-pip install --upgrade streamlit
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -20,15 +20,15 @@ def classify_strength_category(strength_value):
     else:
         return 'Ultra-high Strength'
 
-# Color map for strength categories
-color_map = {
-    "Low Strength": "red",
-    "Medium Strength": "orange",
-    "High Strength": "green",
-    "Ultra-high Strength": "blue"
+# Emoji map for strength categories
+emoji_map = {
+    "Low Strength": "🔴",
+    "Medium Strength": "🟠",
+    "High Strength": "🟢",
+    "Ultra-high Strength": "🔵"
 }
 
-# App UI
+# Streamlit UI
 st.set_page_config(page_title="Concrete Strength Predictor", layout="centered")
 st.title("Concrete Compressive Strength Prediction with AI")
 st.subheader("Enter the concrete mixture composition and age (in days)")
@@ -60,14 +60,9 @@ if st.button("Predict Strength"):
     strength_category = classify_strength_category(prediction)
 
     st.success(f"Predicted Compressive Strength: {prediction:.2f} MPa")
+    st.write(f"**Strength Category:** {emoji_map[strength_category]} {strength_category}")
 
-    # Display colored category label
-    st.markdown(
-    f"<h4 style='color:{color_map[strength_category]}'>{strength_category}</h4>",
-    unsafe_allow_html=True  # Make sure your Streamlit version supports this
-)
-
-    # Strength category pie chart
+    # Pie chart visualization
     categories = ['Low Strength', 'Medium Strength', 'High Strength', 'Ultra-high Strength']
     values = [0, 0, 0, 0]
 
@@ -77,7 +72,6 @@ if st.button("Predict Strength"):
     else:
         st.error(f"Unexpected strength category: {strength_category}")
 
-    # Plot pie chart
     fig, ax = plt.subplots()
     ax.pie(
         values,
