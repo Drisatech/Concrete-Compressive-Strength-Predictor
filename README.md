@@ -1,4 +1,4 @@
-# CoConcrete-Compressive-Strength-PredictConcrete-Compressive-Strength-Predictor
+# Concrete-Compressive-Strength-PredictConcrete-Compressive-Strength-Predictor
 # Smart Concrete Strength Predictor
 
 **Predict the compressive strength of concrete using AI.**  
