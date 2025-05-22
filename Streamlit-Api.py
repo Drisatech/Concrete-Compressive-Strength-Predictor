@@ -54,22 +54,19 @@ if st.button("Predict Strength"):
         "Age": age
     }])
 
-    # Predict strength
     prediction = model.predict(input_data)[0]
     strength_category = classify_strength_category(prediction)
 
     st.success(f"Predicted Compressive Strength: {prediction:.2f} MPa")
     st.info(f"Strength Category: **{strength_category}**")
 
-    # Visualization: Pie chart for strength distribution
     categories = ['Low Strength', 'Medium Strength', 'High Strength', 'Ultra-high Strength']
     values = [0, 0, 0, 0]
-    idx = categories.index(strength_category)
-    values[idx] = 1
+    index = categories.index(strength_category)
+    values[index] = 1
 
-    st.subheader("Strength Category Distribution")
     fig, ax = plt.subplots()
-    ax.pie(values, labels=categories, autopct=lambda p: f'{p:.1f}%' if p > 0 else '', startangle=90, colors=['#FF9999','#FFCC99','#99FF99','#66B2FF'])
+    ax.pie(values, labels=categories, autopct=lambda p: f'{p:.0f}%' if p > 0 else '', startangle=90, colors=['#FF9999','#FFCC99','#99FF99','#66B2FF'])
     ax.axis('equal')
     st.pyplot(fig)
 
