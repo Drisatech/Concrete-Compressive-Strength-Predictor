@@ -6,13 +6,20 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 # Display DRISA logo
+# Load and resize the logo
 logo = Image.open("Drisa_Logo.jpg")
-
-# Resize the logo (e.g., 100x100 pixels)
 logo = logo.resize((100, 100))
 
-# Display logo in the sidebar
-st.sidebar.image(logo, caption="DRISA", use_container_width=False)
+# Center using Markdown and st.image inside a container
+st.markdown("<h1 style='text-align: center;'>Concrete Strength Predictor</h1>", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 1, 1])
+with col1:
+    st.empty()
+with col2:
+    st.image(logo, width=100)
+with col3:
+    st.empty()
 
 # Load trained model
 model = joblib.load('concrete_xgb_model.pkl')
