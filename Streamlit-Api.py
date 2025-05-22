@@ -1,4 +1,5 @@
 # Streamlit-Api.py
+pip install --upgrade streamlit
 import streamlit as st
 import pandas as pd
 import numpy as np
