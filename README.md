@@ -20,10 +20,8 @@ Using 1,030 experimental records containing 8 input variables (cement, slag, fly
 
 ## Demo
 
-![Demo Screenshot](images/demo1.jpg)
-## Demo
-
-![Demo Screenshot](images/demo.jpg)
+![Demo Screenshot](demo1.jpg)
+![Demo Screenshot](demo.jpg)
 
 ---
 
