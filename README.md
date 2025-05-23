@@ -20,7 +20,8 @@ Using 1,030 experimental records containing 8 input variables (cement, slag, fly
 
 ## Demo
 
-![Demo Screenshot](images/demo.png) <!-- Replace with your actual screenshot path -->
+![Demo Screenshot](Concrete-Compressive-Strength-Predictor/demo1.jpg)- Replace with your actual screenshot path -->
+![Demo Screenshot](Concrete-Compressive-Strength-Predictor/demo.jpg)-
 
 ---
 
