@@ -70,12 +70,6 @@ if submit:
     categories = list(emoji_map.keys())
     values = [1 if strength_category == cat else 0 for cat in categories]
 
-    fig, ax = plt.subplots()
-    ax.pie(values, labels=categories, autopct=lambda p: f'{p:.0f}%' if p > 0 else '',
-           startangle=90, colors=['#FF9999','#FFCC99','#99FF99','#66B2FF'])
-    ax.axis('equal')
-    st.pyplot(fig)
-
     # Append to history
     st.session_state.history.append({
         "Cement": cement,
